@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Code Editor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+</head>
+<body>
+    <h1>Online Code Editor</h1>
+    <textarea id="editor" rows="10" cols="50" class="language-java"></textarea>
+    <br>
+    <button onclick="runCode()">Run</button>
+    <h2>Output</h2>
+    <pre id="output"></pre>
+
+    <script>
+        function runCode() {
+            const code = document.getElementById("editor").value;
+            fetch("/execute", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(code),
+            })
+            .then((response) => response.text())
+            .then((data) => {
+                document.getElementById("output").textContent = data;
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
+        }
+
+        // Initialize Prism.js syntax highlighting
+        Prism.highlightAll();
+    </script>
+</body>
+</html>
